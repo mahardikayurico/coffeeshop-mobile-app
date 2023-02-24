@@ -11,6 +11,7 @@ import LoginPage from "./src/pages/Authentifikasi/LoginPages";
 import ForgotPassword from "./src/pages/Authentifikasi/ForgotPassword";
 import HomePage from "./src/pages/HomePages/HomePage";
 import ProductDetail from "./src/pages/ProductsPages/ProductDetail";
+import CartPage from "./src/pages/OrderPages/CartPage";
 //end pages
 
 const Stack = createNativeStackNavigator();
@@ -57,6 +58,11 @@ function App() {
           name="ProductDetail"
           component={ProductDetail}
           options={{ title: "Product Detail" }}
+        />
+        <Stack.Screen
+          name="CartPage"
+          component={CartPage}
+          options={{ title: "My Cart" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
