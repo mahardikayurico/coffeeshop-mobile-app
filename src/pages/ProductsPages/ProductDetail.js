@@ -1,49 +1,57 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-
-const style = StyleSheet.create({
-  welcome: {
-    fontSize: 20,
-    fontWeight: "900",
-    marginTop: 5,
-    color: "#000000",
-    marginLeft: 35,
-    marginRight: 35,
-  },
-  subtitle: {
-    fontSize: 15,
-    fontWeight: "300",
-    marginTop: 5,
-    color: "#000000",
-    marginLeft: 35,
-    marginRight: 35,
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "#6A4029",
-    padding: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 25,
-    borderRadius: 15,
-  },
-  text: {
-    fontSize: 16,
-    color: "#FFFFFF",
-  },
-});
+import { useRoute } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import style from "./DetailStyles";
 
 const ProductDetail = ({ navigation }) => {
+  const route = useRoute();
+  const { products } = route.params;
+  const handleAddToCart = async () => {
+    try {
+      const cartData = await AsyncStorage.getItem("cart");
+      let cart = [];
+      if (cartData !== null) {
+        cart = JSON.parse(cartData);
+      }
+      const newCartItem = {
+        id: products.id,
+        title: products.title,
+        price: products.price,
+        image: products.images[0].filename,
+        quantity: 1,
+      };
+      cart.push(newCartItem);
+      await AsyncStorage.setItem("cart", JSON.stringify(cart));
+      console.log("Item has been added to the cart");
+      console.log(cart);
+      navigation.navigate("CartPage");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View>
-      <View>
+      <View
+        style={{
+          alignItems: "center",
+        }}
+      >
         <Image
-          source={require("../../assets/images/product4.png")}
-          style={{ width: "100%", resizeMode: "contain", marginTop: 35 }}
+          source={{
+            uri: `http://192.168.1.7:5000/public/uploads/images/${products.images[0].filename}`,
+          }}
+          style={{
+            width: "50%",
+            height: 200,
+            resizeMode: "cover",
+            marginTop: 35,
+            borderRadius: 100,
+          }}
         ></Image>
       </View>
       <View>
         <Text style={[style.welcome, { textAlign: "center", fontSize: 40 }]}>
-          Cold Brew{" "}
+          {products.title}
         </Text>
         <Text
           style={[
@@ -51,30 +59,19 @@ const ProductDetail = ({ navigation }) => {
             { textAlign: "center", color: "#6A4029", fontSize: 30 },
           ]}
         >
-          IDR 30.000
+          IDR {products.price}
         </Text>
       </View>
       <View>
         <Text style={[style.welcome, { marginTop: 15 }]}>Delivery info</Text>
-        <Text style={style.subtitle}>
-          Delivered only on monday until friday from 1 pm to 7 pm
-        </Text>
+        <Text style={style.subtitle}>{products.delivery}</Text>
       </View>
       <View>
         <Text style={style.welcome}>Description</Text>
-        <Text style={style.subtitle}>
-          Cold brewing is a method of brewing that combines ground coffee and
-          cool water and uses time instead of heat to extract the flavor. It is
-          brewed in small batches and steeped for as long as 48 hours.
-        </Text>
+        <Text style={style.subtitle}>{products.description}</Text>
       </View>
       <View>
-        <TouchableOpacity
-          style={style.button}
-          onPress={() => {
-            navigation.navigate("CartPage");
-          }}
-        >
+        <TouchableOpacity style={style.button} onPress={handleAddToCart}>
           <Text style={style.text}>Add to cart</Text>
         </TouchableOpacity>
       </View>

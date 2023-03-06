@@ -8,6 +8,8 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState } from "react";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const style = StyleSheet.create({
   scrollViewContainer: {
@@ -69,19 +71,34 @@ const style = StyleSheet.create({
 });
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmailChange = (text) => {
-    setEmail(text);
+  const handleUsernameChange = (text) => {
+    setUsername(text);
   };
 
   const handlePasswordChange = (text) => {
     setPassword(text);
   };
 
-  const handleSubmit = () => {
-    console.log(email, password);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios({
+      url: "http://192.168.1.7:5000/api/v1/auth/login",
+      method: "POST",
+      data: { username, password },
+    })
+      .then((res) => {
+        console.log(res.data.data);
+        AsyncStorage.setItem("@userLogin", JSON.stringify(res.data.data));
+        AsyncStorage.setItem("@userId", res.data.data.user.id);
+        navigation.navigate("HomePage");
+      })
+      .catch((error) => {
+        // setValidate({ error: true, message: err.response.data.message });
+        console.log(error);
+      });
   };
   return (
     <ScrollView
@@ -100,9 +117,9 @@ const Login = ({ navigation }) => {
         </View>
         <View>
           <TextInput
-            placeholder="Enter your Email"
-            onChangeText={handleEmailChange}
-            value={email}
+            placeholder="Enter your username"
+            onChangeText={handleUsernameChange}
+            value={username}
             style={style.form}
           />
           <TextInput
@@ -123,10 +140,10 @@ const Login = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             style={style.buttonprimary}
-            //   onPress={handleSubmit}
-            onPress={() => {
-              navigation.navigate("HomePage");
-            }}
+            onPress={handleSubmit}
+            // onPress={() => {
+            //   navigation.navigate("HomePage");
+            // }}
           >
             <Text style={style.textprimary}>Login</Text>
           </TouchableOpacity>

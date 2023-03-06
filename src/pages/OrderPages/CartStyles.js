@@ -1,0 +1,97 @@
+import { Dimensions, StyleSheet } from "react-native";
+const style = StyleSheet.create({
+  welcome: {
+    fontSize: 20,
+    fontWeight: "900",
+    marginTop: 5,
+    color: "#000000",
+    marginLeft: 35,
+    marginRight: 35,
+  },
+  subprice: {
+    fontSize: 15,
+    fontWeight: "700",
+    marginTop: 5,
+    color: "#ADADAF",
+    marginLeft: 35,
+    marginRight: 35,
+  },
+  pricedetail: {
+    fontSize: 15,
+    fontWeight: "400",
+    marginTop: 5,
+    color: "#000000",
+    marginLeft: 35,
+    marginRight: 35,
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#FFBA33",
+    padding: 20,
+    marginLeft: 35,
+    marginRight: 35,
+    marginTop: 25,
+    borderRadius: 15,
+  },
+  text: {
+    fontSize: 16,
+    color: "#000000",
+    fontWeight: "700",
+  },
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    // paddingHorizontal: 20,
+  },
+  cardWrap: {
+    width: Dimensions.get("window").width / 2.3,
+    // width: "66.66%",
+    // marginLeft: 15,
+    padding: 5,
+    alignItems: "center",
+  },
+  card: {
+    backgroundColor: "#fff",
+    height: 150,
+    // elevation: 7,
+    width: "80%",
+    borderRadius: 30,
+    marginTop: 15,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  productTitle: {
+    fontWeight: "900",
+    fontSize: 20,
+    color: "#333",
+    // textAlign: "center",
+  },
+  productPrice: {
+    color: "#6A4029",
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  quantityParent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 15,
+    alignItems: "center",
+    flex: 1,
+  },
+  iconQuantity: {
+    backgroundColor: "rgba(231, 170, 54, 0.52)",
+    borderRadius: 50,
+    width: 30,
+    height: 30,
+    textAlign: "center",
+  },
+  iconText: {
+    color: "#6A4029",
+    fontSize: 15,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+});
+
+export default style;

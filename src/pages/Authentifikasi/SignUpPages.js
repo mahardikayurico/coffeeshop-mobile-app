@@ -7,7 +7,9 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import React, { useEffect, useCallback, useState, AsyncStorage } from "react";
+import axios from "axios";
 
 const style = StyleSheet.create({
   scrollViewContainer: {
@@ -48,12 +50,17 @@ const style = StyleSheet.create({
 });
 
 const SignUp = ({ navigation }) => {
-  const [name, setName] = useState("");
+  const [fullname, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleNameChange = (text) => {
-    setName(text);
+  const handleFullnameChange = (text) => {
+    setFullname(text);
+  };
+
+  const handleUsernameChange = (text) => {
+    setUsername(text);
   };
 
   const handleEmailChange = (text) => {
@@ -64,8 +71,20 @@ const SignUp = ({ navigation }) => {
     setPassword(text);
   };
 
-  const handleSubmit = () => {
-    console.log(name, email, password);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios({
+      url: "http://192.168.1.7:5000/api/v1/auth/register",
+      method: "POST",
+      data: { fullname, username, email, password },
+    })
+      .then((res) => {
+        console.log(res.data);
+        navigation.navigate("LoginPage");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <ScrollView
@@ -82,32 +101,34 @@ const SignUp = ({ navigation }) => {
         ></Image>
       </View>
       <View>
+        {/* {validate.error && <Text>{validate.message}</Text>} */}
         <TextInput
           placeholder="Enter your fullname"
-          onChangeText={handleNameChange}
-          value={name}
+          onChangeText={handleFullnameChange}
+          value={fullname}
+          style={style.form}
+        />
+        <TextInput
+          placeholder="Enter your Usename"
+          onChangeText={handleUsernameChange}
+          value={username}
           style={style.form}
         />
         <TextInput
           placeholder="Enter your Email"
+          // value={email}
           onChangeText={handleEmailChange}
           value={email}
           style={style.form}
         />
         <TextInput
           placeholder="Enter your Password"
+          style={style.form}
           onChangeText={handlePasswordChange}
           value={password}
-          style={style.form}
           secureTextEntry={true}
         />
-        <TouchableOpacity
-          style={style.buttonprimary}
-          // onPress={handleSubmit}
-          onPress={() => {
-            navigation.navigate("HomePage");
-          }}
-        >
+        <TouchableOpacity style={style.buttonprimary} onPress={handleSubmit}>
           <Text style={style.textprimary}>Create Account</Text>
         </TouchableOpacity>
       </View>
